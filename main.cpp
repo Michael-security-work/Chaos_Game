@@ -11,26 +11,27 @@ using namespace std;
 
 int main()
 {
- // Create a video mode object
- VideoMode vm(1280, 800);
+	 // Create a video mode object
+	 VideoMode vm(1280, 800);
 
- // Create and open a window for the game
- RenderWindow window(vm, "Chaos Game!!", Style::Default);
- vector<Vector2f> vertices;
- vector<Vector2f> points;
+	 // Create and open a window for the game
+	 RenderWindow window(vm, "Chaos Game!!", Style::Default);
+	 vector<Vector2f> vertices;
+	 vector<Vector2f> points;
 
- while (window.isOpen())
- {
-		 /*
-		 ****************************************
-		 Handle the players input
-		 ****************************************
-		 */
+	while (window.isOpen())
+	{
+		/*
+		****************************************
+		Handle the players input
+		****************************************
+		*/
 
 		Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed) window.close();
+			if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
 
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
@@ -47,31 +48,36 @@ int main()
 					{
 						///fourth click
 						///push back to points vector
+						points.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
 					}
 				}
 			}
 		}
-		if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
 
-		 /*
-		 ****************************************
-		 Update
-		 ****************************************
-		 */
+		/*
+		****************************************
+		Update
+		****************************************
+		*/
 
-		 if(points.size() > 0)
-		 {
-			 ///generate more point(s)
-			 ///select random vertex
-			 ///calculate midpoint between random vertex and the last point in the vector
-			 ///push back the newly generated coord.
-		 }
+			
+		if(points.size() > 0)
+		{
+			///generate more point(s)
+			///select random vertex
+			///calculate midpoint between random vertex and the last point in the vector
+			///push back the newly generated coord.
+			Vector2f p = points[points.size() - 1];
+			Vector2f v = vertices[rand() % vertices.size()];
+			Vector2f newPoint((p.x + v.x) / 2, (p.y + v.y) / 2);
+			points.push_back(newPoint);
+		}
 
-		 /*
-		 ****************************************
-		 Draw
-		 ****************************************
-		 */
+		/*
+		****************************************
+		Draw
+		****************************************
+		*/
 
 		 window.clear();
 		 for(int i = 0; i < vertices.size(); i++)
@@ -82,7 +88,13 @@ int main()
 			 window.draw(rect);
 		 }
 
-		 ///TODO:  Draw points
+		 for (int i = 0; i < points.size(); i++)
+		 {
+			 RectangleShape rect(Vector2f(1,1));
+			 rect.setPosition(Vector2f(points[i].x, points[i].y));
+			 rect.setFillColor(Color::Blue);
+			 window.draw(rect);
+		 }
 
 		 window.display();
 
