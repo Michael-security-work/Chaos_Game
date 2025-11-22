@@ -18,20 +18,18 @@ int main()
 	 RenderWindow window(vm, "Chaos Game!!", Style::Default);
 	 vector<Vector2f> vertices;
 	 vector<Vector2f> points;
-
-	while (window.isOpen())
-	{
-		/*
-		****************************************
-		Handle the players input
-		****************************************
-		*/
-
+	 
+	 bool readingTheInput = true;
+	 bool continueReadingVertices = true;
+	 while (readingTheInput)
+	 {
 		Event event;
 		while (window.pollEvent(event))
 		{
 			if (event.type == Event::Closed) window.close();
 			if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
+			
+			if (Keyboard::isKeyPressed(Keyboard::Enter)) continueReadingVertices = false;
 
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
@@ -40,18 +38,40 @@ int main()
 					std::cout << "the left button was pressed" << std::endl;
 					std::cout << "mouse x: " << event.mouseButton.x << std::endl;
 					std::cout << "mouse y: " << event.mouseButton.y << std::endl;
-					if(vertices.size() < 3)
+					if(vertices.size() < 10 && continueReadingVertices)
 					{
 						vertices.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
 					}
 					else if(points.size() == 0)
 					{
-						///fourth click
-						///push back to points vector
 						points.push_back(Vector2f(event.mouseButton.x, event.mouseButton.y));
+						readingTheInput = false;
 					}
 				}
 			}
+			
+			window.clear();
+			 
+			for(int i = 0; i < vertices.size(); i++)
+			 {
+				 RectangleShape rect(Vector2f(7,7));
+				 rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
+				 rect.setFillColor(Color::Red);
+				 window.draw(rect);
+			 }
+
+			window.display();
+		}
+		
+	 }
+
+	while (window.isOpen())
+	{
+		Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::Closed) window.close();
+			if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
 		}
 
 		/*
@@ -78,25 +98,28 @@ int main()
 		Draw
 		****************************************
 		*/
-
-		 window.clear();
-		 for(int i = 0; i < vertices.size(); i++)
+			
+		
+		 
+		window.clear();
+		 
+		for(int i = 0; i < vertices.size(); i++)
 		 {
-			 RectangleShape rect(Vector2f(10,10));
+			 RectangleShape rect(Vector2f(2,2));
 			 rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
-			 rect.setFillColor(Color::Blue);
+			 rect.setFillColor(Color::Red);
 			 window.draw(rect);
 		 }
 
 		 for (int i = 0; i < points.size(); i++)
 		 {
-			 RectangleShape rect(Vector2f(1,1));
+			 RectangleShape rect(Vector2f(0,0));
 			 rect.setPosition(Vector2f(points[i].x, points[i].y));
 			 rect.setFillColor(Color::Blue);
 			 window.draw(rect);
 		 }
 
-		 window.display();
+		window.display();
 
 	}
 
