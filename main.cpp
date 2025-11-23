@@ -35,7 +35,7 @@ int main()
 	 exit.setFont(font);
 	 exit.setFillColor(Color::White);
 	 
-	 string textInit = "Left click to choose three or more points (up to 10).";
+	 string textInit = "Leftclick to choose three or more points for vertives (up to 10).";
 	 string text1 = "Rightclick anywhere to start generating the fractal.";
 	 string textWarning = "You need to have at least 3 vertices.";
 	 string textWarning2 = "You've hit 10 points, leftclick to start generating";
@@ -143,8 +143,8 @@ int main()
 		
 		int previousVertex = -1;
 		
-		bool genarating = true;
-		while (genarating && window.isOpen())
+		bool generating = true;
+		while (generating && window.isOpen())
 		{
 			Event event;
 			while (window.pollEvent(event))
@@ -153,7 +153,7 @@ int main()
 				if (Keyboard::isKeyPressed(Keyboard::Escape)) 
 				{
 					sleep(milliseconds(100));
-					genarating = false;
+					generating = false;
 					vertices.clear();
 					points.clear();
 				}
