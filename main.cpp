@@ -29,7 +29,7 @@ int main()
 			if (event.type == Event::Closed) window.close();
 			if (Keyboard::isKeyPressed(Keyboard::Escape)) window.close();
 			
-			if (Keyboard::isKeyPressed(Keyboard::Enter)) continueReadingVertices = false;
+			if (Keyboard::isKeyPressed(Keyboard::Enter) && vertices.size() > 2) continueReadingVertices = false;
 
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
@@ -53,18 +53,26 @@ int main()
 			window.clear();
 			 
 			for(int i = 0; i < vertices.size(); i++)
-			 {
-				 RectangleShape rect(Vector2f(7,7));
-				 rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
-				 rect.setFillColor(Color::Red);
-				 window.draw(rect);
-			 }
+			{
+				RectangleShape rect(Vector2f(7,7));
+				rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
+				rect.setFillColor(Color::Red);
+				window.draw(rect);
+			}
 
 			window.display();
 		}
 		
-	 }
-
+	}
+	
+	int previousVertex = -1;
+	float r = 0.5;
+	if(vertices.size() == 5) r = 0.618;
+	else if(vertices.size() == 6) r = 0.667;
+	else if(vertices.size() == 7) r = 0.692;
+	else if(vertices.size() == 8) r = 0.707;
+	else if(vertices.size() == 9) r = 0.742;
+	else if(vertices.size() == 10) r = 0.764;
 	while (window.isOpen())
 	{
 		Event event;
@@ -81,7 +89,7 @@ int main()
 		*/
 
 			
-		if(points.size() > 0)
+		if(points.size() > 0 && vertices.size() == 3)
 		{
 			///generate more point(s)
 			///select random vertex
@@ -89,7 +97,24 @@ int main()
 			///push back the newly generated coord.
 			Vector2f p = points[points.size() - 1];
 			Vector2f v = vertices[rand() % vertices.size()];
-			Vector2f newPoint((p.x + v.x) / 2, (p.y + v.y) / 2);
+			Vector2f newPoint((p.x + v.x) * r, (p.y + v.y) * r);
+			points.push_back(newPoint);
+		}
+		else if(points.size() > 0)
+		{
+			Vector2f p = points[points.size() - 1];
+			Vector2f v;
+			while(true)
+			{
+				int ran = rand() % vertices.size();
+				if(ran != previousVertex)
+				{
+					v = vertices[ran];
+					previousVertex = ran;
+					break;
+				}
+			}
+			Vector2f newPoint((v.x - p.x) * r + p.x, (v.y - p.y) * r + p.y);
 			points.push_back(newPoint);
 		}
 
@@ -105,7 +130,7 @@ int main()
 		 
 		for(int i = 0; i < vertices.size(); i++)
 		 {
-			 RectangleShape rect(Vector2f(2,2));
+			 RectangleShape rect(Vector2f(3,3));
 			 rect.setPosition(Vector2f(vertices[i].x, vertices[i].y));
 			 rect.setFillColor(Color::Red);
 			 window.draw(rect);
@@ -113,7 +138,7 @@ int main()
 
 		 for (int i = 0; i < points.size(); i++)
 		 {
-			 RectangleShape rect(Vector2f(0,0));
+			 RectangleShape rect(Vector2f(1,1));
 			 rect.setPosition(Vector2f(points[i].x, points[i].y));
 			 rect.setFillColor(Color::Blue);
 			 window.draw(rect);
