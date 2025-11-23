@@ -22,7 +22,7 @@ int main()
 	 vector<Vector2f> points;
 	 
 	 Font font;
-	 font.loadFromFile("dejavu/DejaVuSansMono.ttf");
+	 font.loadFromFile("fonts/DejaVuSansMono.ttf");
 	 Text text;
 	 text.setFont(font);
 	 text.setString("Choose three or more points (up to 10).");
